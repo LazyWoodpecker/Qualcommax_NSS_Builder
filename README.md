@@ -1,3 +1,7 @@
+# Please note:
+
+This is a copy of [JuliusBairaktaris](https://github.com/JuliusBairaktaris/Qualcommax_NSS_Builder) Qualcommax_NSS_Builder modified for my own use.  Mostly, to build the packages and target that I want. Thanks to Julius for this work.  Any blame for errors, etc. in this copy should go to me [LazyWoodpecker].
+
 # Qualcommax NSS Builder
 
 This project automates the process of building OpenWrt firmware images for the Qualcomm IPQ807x platform, specifically targeting the Xiaomi AX3600 router. The build process incorporates various optimizations, hardening options, and quality-of-life enhancements. 
