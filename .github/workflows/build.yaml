@@ -256,61 +256,61 @@ jobs:
           if-no-files-found: error
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
-#  release:
-#    name: Publish release
-#    needs:
-#      - detect-updates
-#      - build
-#    if: needs.build.result == 'success'
-#    runs-on: ubuntu-24.04
-#    timeout-minutes: 20
-#    permissions:
-#      contents: write
-#    env:
-#      GH_TOKEN: ${{ github.token }}
-#    steps:
-#      - name: Download build artifacts
-#        uses: actions/download-artifact@v6
-#        with:
-#          name: ipq807x-images
-#          path: firmware
-#
-#      - name: Compute release metadata
-#        id: meta
-#        run: |
-#          set -euo pipefail
-#          echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
-#          echo "timestamp=$(date -u +%Y%m%dT%H%M%SZ)" >> "$GITHUB_OUTPUT"
-#
-#      - name: Publish GitHub release
-#        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090
-#        with:
-#          files: firmware/*
-#          tag_name: ${{ env.RELEASE_PREFIX }}-${{ steps.meta.outputs.timestamp }}-${{ github.run_id }}
-#          name: OpenWrt Build ${{ steps.meta.outputs.date }}
-#          body: |
-#            ## OpenWrt Automated Build
-#            - Main commit: `${{ needs.detect-updates.outputs.main_sha }}`
-#            - NSS packages commit: `${{ needs.detect-updates.outputs.nss_sha }}`
-#            - Trigger: `${{ github.event_name }}`
-#
-#      - name: Prune old releases
-#        run: |
-#          set -euo pipefail
-#          keep="${RELEASES_TO_KEEP:-2}"
-#          releases_json=$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100")
-#          # Delete releases older than the configured retention threshold to keep the feed tidy.
-#          mapfile -t old_releases < <(jq -r --argjson keep "$keep" '
-#            map(select(.draft | not))
-#            | sort_by(.created_at)
-#            | reverse
-#            | .[$keep:]
-#            | .[]
-#            | "\(.id) \(.tag_name)"' <<<"$releases_json")
-#
-#          for release in "${old_releases[@]}"; do
-#            release_id="${release%% *}"
-#            tag_name="${release#* }"
-#            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/releases/${release_id}"
-#            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/tags/${tag_name}" 2>/dev/null || true
-#          done
+  release:
+    name: Publish release
+    needs:
+      #      - detect-updates
+      - build
+    if: needs.build.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: ipq807x-images
+          path: firmware
+
+      - name: Compute release metadata
+        id: meta
+        run: |
+          set -euo pipefail
+          echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+          echo "timestamp=$(date -u +%Y%m%dT%H%M%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090
+        with:
+          files: firmware/*
+          tag_name: ${{ env.RELEASE_PREFIX }}-${{ steps.meta.outputs.timestamp }}-${{ github.run_id }}
+          name: OpenWrt Build ${{ steps.meta.outputs.date }}
+          body: |
+            ## OpenWrt Automated Build
+            #            - Main commit: `${{ needs.detect-updates.outputs.main_sha }}`
+            #            - NSS packages commit: `${{ needs.detect-updates.outputs.nss_sha }}`
+            - Trigger: `${{ github.event_name }}`
+
+      - name: Prune old releases
+        run: |
+          set -euo pipefail
+          keep="${RELEASES_TO_KEEP:-2}"
+          releases_json=$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100")
+          # Delete releases older than the configured retention threshold to keep the feed tidy.
+          mapfile -t old_releases < <(jq -r --argjson keep "$keep" '
+            map(select(.draft | not))
+            | sort_by(.created_at)
+            | reverse
+            | .[$keep:]
+            | .[]
+            | "\(.id) \(.tag_name)"' <<<"$releases_json")
+
+          for release in "${old_releases[@]}"; do
+            release_id="${release%% *}"
+            tag_name="${release#* }"
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/releases/${release_id}"
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/tags/${tag_name}" 2>/dev/null || true
+          done
