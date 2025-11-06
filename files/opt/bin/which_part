@@ -1,0 +1,18 @@
+#!/bin/sh
+
+printf "See https://forum.openwrt.org/t/openwrt-support-for-linksys-mx4200/86477/2044\n\n"
+
+awk '{
+        if($0~/ubi.mtd=22,/) {
+                new_kernel="alt_kernel"
+                new_part=2
+                part=1
+        }
+        if($0~/ubi.mtd=24,/) {
+                new_kernel="kernel"
+                new_part=1
+                part=2
+        }
+        printf("current_part=%s new_part=%s new_kernel=%s\n",
+                part,new_part,new_kernel)
+}' /proc/cmdline

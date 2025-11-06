@@ -1,0 +1,28 @@
+#!/bin/sh
+
+printf "See https://forum.openwrt.org/t/openwrt-support-for-linksys-mx4200/86477/2044\n\n"
+
+eval $(awk '{
+        if($0~/ubi.mtd=22,/) {
+                new_kernel="alt_kernel"
+                new_part=2
+                part=1
+        }
+        if($0~/ubi.mtd=24,/) {
+                new_kernel="kernel"
+                new_part=1
+                part=2
+        }
+        printf("current_part=%s new_part=%s new_kernel=%s\n",
+                part,new_part,new_kernel)
+}' /proc/cmdline)
+
+if [ "$1" = "-y" ]; then
+	printf "Current partition is %d" $current_part 1>&2
+	printf "; next boot will be other partition\n" 1>&2
+
+	fw_setenv boot_part $new_part
+else
+	printf "Current partition is %d" $current_part 1>&2
+	printf "; to switch use \042-y\042 option\n" 1>&2
+fi

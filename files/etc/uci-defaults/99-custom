@@ -1,0 +1,33 @@
+# Beware! This script will be in /rom/etc/uci-defaults/ as part of the image.
+
+# log potential errors
+exec >/tmp/setup.log 2>&1
+
+# Basic system stuff
+{
+        uci set system.@system[0].hostname='OpenWrtTest'
+        uci set system.@system[0].timezone='EST5EDT,M3.2.0,M11.1.0'
+        uci set system.@system[0].zonename='America/New York'
+        uci set system.@system[0].log_size='64'
+        uci set system.@system[0].log_proto='udp'
+        uci set system.@system[0].conloglevel='6'
+        uci set system.@system[0].cronloglevel='8'
+        #uci commit system
+}
+
+# Configure LAN
+
+# Use the last two bytes of the ether addr as the 3rd octet.
+IFACE=wan
+addr=$(ip addr show ${IFACE} | grep link/ether | cut -d' ' -f6 | cut -d: -f 6)
+octet=$(awk -v o=0x${addr} 'BEGIN {printf "%d\n", o}')
+if [ "$octet" ] && [ $octet -ge 0 -a $octet -le 255 ]; then
+        NETADDR="192.168.${octet}.1"
+        echo "New LAN IPv4 address is ${NETADDR}" 1>&2
+        uci set network.lan.ipaddr="${NETADDR}"
+        uci set network.lan.netmask='255.255.255.0'
+        #uci commit network
+fi
+
+echo "All done!"
+
