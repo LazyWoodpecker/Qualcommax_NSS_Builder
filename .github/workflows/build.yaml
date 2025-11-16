@@ -22,13 +22,15 @@ defaults:
 env:
   REMOTE_REPOSITORY: LazyWoodpecker/openwrt-ipq
   REMOTE_BRANCH: 24.10-nss
+  # Trying to checkout a specific point, instead of a branch.
+  REMOTE_SHA: 0c1ff934eca71e149ab80c9c250598e01226100e
   CONFIG_FILE: mx4300.config
   CUSTOM_FILES_PATH: files
   RELEASE_PREFIX: 24.10-nss
     #  NSS_PACKAGES_REPOSITORY: qosmio/nss-packages
     #  NSS_PACKAGES_REPOSITORY_BRANCH: NSS-12.5-K6.x
   ARTIFACT_RETENTION_DAYS: 7
-  RELEASES_TO_KEEP: 2
+  RELEASES_TO_KEEP: 10
   USE_CCACHE: 1
 
 jobs:
@@ -90,7 +92,8 @@ jobs:
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
             #          ref: ${{ env.MAIN_SHA }}
-          ref: ${{ env.REMOTE_BRANCH }}
+            #ref: ${{ env.REMOTE_BRANCH }}
+          ref: ${{ env.REMOTE_SHA }}
           fetch-depth: 0
           persist-credentials: false
 
