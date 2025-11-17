@@ -24,7 +24,7 @@ env:
   REMOTE_BRANCH: 24.10-nss
   # Trying to checkout a specific point, instead of a branch.
   REMOTE_SHA: 0c1ff934eca71e149ab80c9c250598e01226100e
-  CONFIG_FILE: mx4300.config
+  CONFIG_FILE: multitarget.config
   CUSTOM_FILES_PATH: files
   RELEASE_PREFIX: 24.10-nss
     #  NSS_PACKAGES_REPOSITORY: qosmio/nss-packages
