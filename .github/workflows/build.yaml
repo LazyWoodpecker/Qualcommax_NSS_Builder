@@ -128,15 +128,15 @@ jobs:
             done < <(find ../builder_repo/patches -maxdepth 1 -type f -name '*.patch' | sort)
           fi
 
-          # Add custom feed
-          if [ ! -f feeds.conf ]; then
-            cp feeds.conf.default feeds.conf
-          fi
-          echo "src-git qosmio https://github.com/qosmio/packages-extra" >> feeds.conf
+          ## Add custom feed
+          #if [ ! -f feeds.conf ]; then
+          #  cp feeds.conf.default feeds.conf
+          #fi
+          #echo "src-git qosmio https://github.com/qosmio/packages-extra" >> feeds.conf
 
           # Update and install feeds
-          ./scripts/feeds update qosmio
-          ./scripts/feeds install -a -p qosmio
+          #./scripts/feeds update qosmio
+          #./scripts/feeds install -a -p qosmio
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
