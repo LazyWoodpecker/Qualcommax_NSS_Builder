@@ -1,0 +1,92 @@
+#!/bin/sh
+
+CONF_DIR=OpenWrt-conf
+
+# Abort if required packages are not installed.
+#[ -r ./pkg_cmds.sh ] && . ./pkg_cmds.sh \
+#        || { echo "Unable to find pkg_cmds file; exiting" ; exit 1 ; }
+
+if type opkg >/dev/null 2>&1
+then
+	PKGUPDATE="opkg update"
+	PKGINSTALL="opkg install"
+	PKGREMOVE="opkg remove"
+	PKGLISTINSTALLED="opkg list-installed"
+	#PKGFORCEREMOVE="opkg --force-removal-of-dependent-packages --autoremove remove"
+elif type apk >/dev/null 2>&1
+then
+	PKGUPDATE="apk update"
+	PKGINSTALL="apk add"
+	PKGREMOVE="apk del"
+	PKGLISTINSTALLED="apk info --installed"
+	#PKGFORCEREMOVE="opkg --force-removal-of-dependent-packages --autoremove remove"
+else
+	echo "Unable to find package manager; aborting" 1>&2
+	exit 126
+fi
+
+pkg_installed ()
+{
+	rc=0
+	for p in $*
+	do
+		if ${PKGLISTINSTALLED} $p | grep -q $p
+		then
+			continue
+		else
+			rc=$?
+			break
+		fi
+	done
+	return $rc
+}
+
+PKGS="block-mount kmod-fs-vfat kmod-usb-storage"
+pkg_installed ${PKGS} \ || { 
+        printf "Required packages not installed:\n"
+        printf "\t%s\n" "${PKGS}"
+        printf "exiting\n"
+        exit 1
+} 1>&2
+
+do_configuration ()
+{
+	# Argument check.
+	dir=${1}
+	[ -d ${dir} ] || {
+		echo "Unable to find configuration dir; aborting" 1>&2
+		exit 1
+	}
+
+	# Install a local_fs tarfile, if present.
+	[ -r ${dir}/local_fs.tar ] && {
+		(cd /; tar xf ${dir}/local_fs.tar)
+	}
+
+	# Run configuration scripts in ${fs}/${CONF_DIR}. 
+	# Scripts must have execute bit set.
+	for Script in ${dir}/S[0-9]*
+	do
+		$Script
+	done
+}
+
+# Use block to register and mount block devices.
+block detect | uci import fstab
+i=0; while uci -q set fstab.@mount[$i].enabled=1; do i=$((i+1)); done
+REG_FS=$(i=0; while uci -q get fstab.@mount[$i].target; do i=$((i+1)); done)
+
+[ "$REG_FS" ] || {
+	echo "No registered file systems found; exiting"
+	exit 1
+} 1>&2
+block mount
+
+# Look for configuration directory in mount points.
+for fs in $REG_FS
+do
+	if [ -d ${fs}/${CONF_DIR} ]; then
+		do_configuration ${fs}/${CONF_DIR}
+		break
+	fi
+done
