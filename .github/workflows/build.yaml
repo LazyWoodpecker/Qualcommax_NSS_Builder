@@ -200,8 +200,8 @@ jobs:
         with:
           name: ipq807x-images
           path: |
-	    openwrt/bin/targets/qualcommax/ipq807x
-	    openwrt/bin/packages/aarch64_cortex-a53
+            openwrt/bin/targets/qualcommax/ipq807x
+            openwrt/bin/packages/aarch64_cortex-a53
           if-no-files-found: error
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
