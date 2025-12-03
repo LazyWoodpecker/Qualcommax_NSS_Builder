@@ -199,7 +199,9 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: ipq807x-images
-          path: openwrt/bin/targets/qualcommax/ipq807x
+          path: |
+	    openwrt/bin/targets/qualcommax/ipq807x
+	    openwrt/bin/packages/aarch64_cortex-a53
           if-no-files-found: error
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
