@@ -200,6 +200,7 @@ jobs:
         with:
           name: ipq807x-images
           path: |
+            openwrt/public-key.pem
             openwrt/bin/targets/qualcommax/ipq807x
             openwrt/bin/packages/aarch64_cortex-a53
           if-no-files-found: error
@@ -220,13 +221,18 @@ jobs:
           - **Main Commit**: \`${{ needs.check_updates.outputs.main_sha }}\`
           - **NSS Commit**: \`${{ needs.check_updates.outputs.nss_sha }}\`
           - **Trigger**: \`${{ github.event_name }}\`
+          - **Notes**: Your notes here.
           EOF
+
+          # Create tarball.
+          tar czf "$tag_name".tgz -C openwrt public-key.pem bin/packages bin/targets
 
           gh release create "$tag_name" \
             --repo "$GITHUB_REPOSITORY" \
             --title "OpenWrt Build $date" \
             --notes-file release_notes.md \
-            $(find openwrt/bin/targets/qualcommax/ipq807x/ -maxdepth 1 -type f)
+            $(find openwrt/bin/targets/qualcommax/ipq807x/ -maxdepth 1 -type f)\
+            "$tag_name".tgz
 
   cleanup_releases:
     name: Cleanup Old Releases
