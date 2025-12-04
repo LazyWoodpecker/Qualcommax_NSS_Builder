@@ -225,14 +225,17 @@ jobs:
           EOF
 
           # Create tarball.
-          tar czf "$tag_name".tgz -C openwrt public-key.pem bin/packages bin/targets
+          #tarball="$tag_name".tgz
+          #tar czf "$tarball" -C openwrt public-key.pem bin/packages bin/targets
+          tarball="$tag_name".zip
+          zip -r "$tarball" openwrt/public-key.pem openwrt/bin/packages openwrt/bin/targets
 
           gh release create "$tag_name" \
             --repo "$GITHUB_REPOSITORY" \
             --title "OpenWrt Build $date" \
             --notes-file release_notes.md \
-            $(find openwrt/bin/targets/qualcommax/ipq807x/ -maxdepth 1 -type f)\
-            "$tag_name".tgz
+            $(find openwrt/bin/targets/qualcommax/ipq807x -maxdepth 1 -type f)\
+            "$tarball"
 
   cleanup_releases:
     name: Cleanup Old Releases
