@@ -195,16 +195,16 @@ jobs:
             make -j1 V=s
           fi
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v5
-        with:
-          name: ipq807x-images
-          path: |
-            openwrt/public-key.pem
-            openwrt/bin/targets/qualcommax/ipq807x
-            openwrt/bin/packages/aarch64_cortex-a53
-          if-no-files-found: error
-          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+#      - name: Upload artifacts
+#        uses: actions/upload-artifact@v5
+#        with:
+#          name: ipq807x-images
+#          path: |
+#            openwrt/public-key.pem
+#            openwrt/bin/targets/qualcommax/ipq807x
+#            openwrt/bin/packages/aarch64_cortex-a53
+#          if-no-files-found: error
+#          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
       - name: Publish release
         run: |
@@ -225,10 +225,11 @@ jobs:
           EOF
 
           # Create tarball.
+          echo "$tag_name" > openwrt/github_tag.txt
           #tarball="$tag_name".tgz
-          #tar czf "$tarball" -C openwrt public-key.pem bin/packages bin/targets
+          #tar czf "$tarball" -C openwrt github_tag.txt public-key.pem bin/packages bin/targets
           tarball="$tag_name".zip
-          zip -r "$tarball" openwrt/public-key.pem openwrt/bin/packages openwrt/bin/targets
+          zip -r "$tarball" openwrt/github_tag.txt openwrt/public-key.pem openwrt/bin
 
           gh release create "$tag_name" \
             --repo "$GITHUB_REPOSITORY" \
