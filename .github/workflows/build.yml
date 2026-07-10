@@ -11,8 +11,8 @@ on:
       - 'devices/**'
       - 'scripts/**'
       - '.github/workflows/build.yml'
-  schedule:
-    - cron: "0 */2 * * *"
+  #schedule:
+  #  - cron: "0 */2 * * *"
 
 concurrency:
   group: build-${{ github.ref }}
@@ -62,6 +62,22 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+        
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
       - name: Install build dependencies
         run: |
           set -euo pipefail
