@@ -30,7 +30,7 @@ env:
   DEVICE: dynalink_dl-wrx36
   VARIANT: edma-nss
   RELEASE_PREFIX: edma-nss
-  KEEP: "2"                     # newest releases to retain
+  KEEP: "20"                     # newest releases to retain
   FEEDS: "src-git nss https://github.com/JuliusBairaktaris/nss-packages.git;edma-nss"
 
 jobs:
@@ -52,7 +52,7 @@ jobs:
         run: bash scripts/check-updates.sh
 
   build:
-    name: Build edma-nss (xiaomi_ax3600)
+    name: Build edma-nss ($(( env.DEVICE }})
     needs: check
     if: needs.check.outputs.need == 'true'
     runs-on: ubuntu-26.04
