@@ -52,7 +52,7 @@ jobs:
         run: bash scripts/check-updates.sh
 
   build:
-    name: Build edma-nss (${{ vars.DEVICE }})
+    name: Build edma-nss (${{ vars.env.DEVICE }})
     needs: check
     if: needs.check.outputs.need == 'true'
     runs-on: ubuntu-26.04
