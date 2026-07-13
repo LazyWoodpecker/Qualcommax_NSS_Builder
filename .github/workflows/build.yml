@@ -11,8 +11,8 @@ on:
       - 'devices/**'
       - 'scripts/**'
       - '.github/workflows/build.yml'
-  schedule:
-    - cron: "0 */2 * * *"
+  #schedule:
+  #  - cron: "0 */2 * * *"
 
 concurrency:
   group: build-${{ github.ref }}
