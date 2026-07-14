@@ -27,7 +27,8 @@ env:
   NSS_REPO: JuliusBairaktaris/nss-packages
   NSS_REF: edma-nss
   TARGET: qualcommax/ipq807x
-  DEVICE: linksys_mx4300
+  #DEVICE: linksys_mx4300
+  DEVICE: dynalink_dl-wrx36
   VARIANT: edma-nss
   RELEASE_PREFIX: edma-nss
   KEEP: "20"                     # newest releases to retain
@@ -52,7 +53,7 @@ jobs:
         run: bash scripts/check-updates.sh
 
   build:
-    name: Build edma-nss (linksys_mx4300)
+    name: Build edma-nss (dynalink_dl-wrx36)
     needs: check
     if: needs.check.outputs.need == 'true'
     runs-on: ubuntu-26.04
