@@ -1,5 +1,5 @@
 #
-# Build config for the Dynalink DL-WRX36 (IPQ8071A) — edma-nss image.
+# Build config for the Linksys MX4300 (IPQ8071A) — edma-nss image.
 #
 # prepare-build.sh copies this to .config and runs `make defconfig`.
 #
@@ -7,7 +7,7 @@
 ## Target Platform
 CONFIG_TARGET_qualcommax=y
 CONFIG_TARGET_qualcommax_ipq807x=y
-CONFIG_TARGET_qualcommax_ipq807x_DEVICE_dynalink_dl-wrx36=y
+CONFIG_TARGET_qualcommax_ipq807x_DEVICE_linksys_mx4300=y
 CONFIG_ATH11K_MEM_PROFILE_1G=y
 CONFIG_IPQ_MEM_PROFILE_1024=y
 CONFIG_KERNEL_IPQ_MEM_PROFILE=1024
