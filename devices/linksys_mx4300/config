@@ -120,8 +120,8 @@ CONFIG_KERNEL_IPV6_MROUTE=y
 ## multicast source. See docs/CUSTOMIZE.md.
 # CONFIG_PACKAGE_igmpproxy is not set
 CONFIG_NSS_FIRMWARE_VERSION_12_5=y
-# AX3600 = 512MB RAM: NSS MEDIUM memory profile (HIGH is the ipq807x default and wrong here)
-CONFIG_NSS_MEM_PROFILE_MEDIUM=y
+## AX3600 = 512MB RAM: NSS MEDIUM memory profile (HIGH is the ipq807x default and wrong here)
+#CONFIG_NSS_MEM_PROFILE_MEDIUM=y
 
 ## ath11k NSS Wi-Fi offload (wifili). Boots host-mode (nss_offload=0,
 ## frame_mode=2); /usr/sbin/nss-up moves the radios onto the NSS data path.
