@@ -32,12 +32,14 @@ FEEDS="${FEEDS:-}"
 CONFIG_FRAGMENT="${CONFIG_FRAGMENT:-}"
 COMMON_DIR="$BUILDER_REPO/devices/${COMMON:-common}"
 DEVICE_DIR="$BUILDER_REPO/devices/$DEVICE"
+LW_DIR="$BUILDER_REPO/devices/LW"
 
 [[ -f "$DEVICE_DIR/config" ]] || log::die "$DEVICE_DIR/config not found"
 [[ -f "$COMMON_DIR/config" ]] || log::die "$COMMON_DIR/config not found"
+[[ -f "$LW_DIR/config" ]] || log::die "$LW_DIR/config not found"
 
 # Least to most specific; the last file wins on a symbol set in several.
-CONFIGS=("$COMMON_DIR/config" "$DEVICE_DIR/config")
+CONFIGS=("$COMMON_DIR/config" "$DEVICE_DIR/config" "$LW_DIR/config")
 if [[ -n "$CONFIG_FRAGMENT" ]]; then
   [[ -f "$BUILDER_REPO/$CONFIG_FRAGMENT" ]] ||
     log::die "CONFIG_FRAGMENT $CONFIG_FRAGMENT not found in $BUILDER_REPO"
