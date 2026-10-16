@@ -34,7 +34,8 @@ env:
   VARIANT: ppe-nss
   RELEASE_PREFIX: ppe-nss
   MESH_RELEASE_PREFIX: ppe-nss-mesh
-  KEEP: "2"                     # newest releases to retain, per prefix
+  #KEEP: "2"                     # newest releases to retain, per prefix
+  KEEP: "10"                     # newest releases to retain, per prefix
   # nss-firmware, and the luci fork carrying luci-app-ppe-qos (openwrt/luci
   # PR 8965), which prepare-build.sh swaps in for the default luci feed.
   FEEDS: |
