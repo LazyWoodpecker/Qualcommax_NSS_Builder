@@ -37,7 +37,7 @@ env:
   PAGES_URL: https://ppenss.github.io
   VARIANT: ppe-nss
   RELEASE_PREFIX: ppe-nss
-  KEEP: "2"                     # newest releases to retain, per prefix
+  KEEP: "10"                     # newest releases to retain, per prefix
   # nss-firmware, and the luci fork carrying luci-app-ppe-qos (openwrt/luci
   # PR 8965), which prepare-build.sh swaps in for the default luci feed.
   FEEDS: |
@@ -156,7 +156,8 @@ jobs:
         # One entry per devices/<name>/ directory. The memory-profile groups exist
         # because the ath11k memory profile is compile-time and image-wide, so
         # boards can only share a build when they share a profile.
-        device: [xiaomi_ax3600, ipq807x-1g, ipq807x-512m, ipq807x-256m, ipq60xx-1g, ipq60xx-512m]
+        #device: [xiaomi_ax3600, ipq807x-1g, ipq807x-512m, ipq807x-256m, ipq60xx-1g, ipq60xx-512m]
+        device: [ipq807x-1g]
     env:
       GH_TOKEN: ${{ github.token }}
       DEVICE: ${{ matrix.device }}
