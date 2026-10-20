@@ -37,7 +37,7 @@ env:
   PAGES_URL: https://ppenss.github.io
   VARIANT: ppe-nss
   RELEASE_PREFIX: ppe-nss
-  KEEP: "2"                     # newest releases to retain, per prefix
+  KEEP: "10"                     # newest releases to retain, per prefix
   # nss-firmware, and the luci fork carrying luci-app-qca-ppe-qos (openwrt/luci
   # PR 8965), which prepare-build.sh swaps in for the default luci feed.
   FEEDS: |
